@@ -1,6 +1,8 @@
 package com.xuecheng.content.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author: zzy
@@ -8,6 +10,8 @@ import lombok.Data;
  * @date: 2023/7/17 13:46
  **/
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class QueryCourseParamsDto {
     //审核状态
     private String auditStatus;
