@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author: zzy
- * @description: TODO
- * @date: 2023/7/17 13:57
- **/
+ * @author zzy
+ * @description 课程基本信息
+ * @date 2023/07/18 19:31
+ */
 
 @Api(value = "课程信息管理接口", tags = "课程信息管理接口")
 @RestController
