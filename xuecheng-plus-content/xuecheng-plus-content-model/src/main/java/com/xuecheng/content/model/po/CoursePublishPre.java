@@ -3,7 +3,9 @@ package com.xuecheng.content.model.po;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,6 +18,8 @@ import java.time.LocalDateTime;
  * @author itcast
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("course_publish_pre")
 public class CoursePublishPre implements Serializable {
 
