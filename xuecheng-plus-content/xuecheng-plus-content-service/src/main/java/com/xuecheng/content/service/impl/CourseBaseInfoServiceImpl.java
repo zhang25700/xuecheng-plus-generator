@@ -10,6 +10,7 @@ import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
+import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.model.po.CourseCategory;
@@ -72,6 +73,35 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         long size = page.getSize();
         //返回数据
         return new PageResult<>(items, counts, current, size);
+    }
+
+    @Override
+    public CourseBaseInfoDto updateCourseBase(Long companyId, EditCourseDto editCourseDto) {
+        //查询课程信息
+        Long courseId = editCourseDto.getId();
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            throw new XueChengPlusException("课程不存在");
+        }
+        //验证是否为本机构修改本机构课程信息
+        if(!companyId.equals(courseBase.getCompanyId())){
+            throw new XueChengPlusException("本机构只能修改本机构课程");
+        }
+        CourseMarket courseMarket = new CourseMarket();
+        //拷贝对象数据
+        BeanUtils.copyProperties(editCourseDto, courseBase);
+        BeanUtils.copyProperties(editCourseDto, courseMarket);
+        //修改时间
+        courseBase.setChangeDate(LocalDateTime.now());
+        //数据库更新数据
+        int update1 = courseBaseMapper.updateById(courseBase);
+        int update2 = courseMarketMapper.updateById(courseMarket);
+        if(!(update1 > 0 && update2 > 0)){
+            throw new XueChengPlusException("修改课程失败");
+        }
+        //返回课程信息
+        CourseBaseInfoDto courseBaseInfo = getCourseBaseInfo(courseId);
+        return courseBaseInfo;
     }
 
     @Transactional
@@ -138,7 +168,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     }
 
     //查询课程信息
-    private CourseBaseInfoDto getCourseBaseInfo(Long courseId) {
+    public CourseBaseInfoDto getCourseBaseInfo(Long courseId) {
         //从课程表查询
         CourseBase courseBase = courseBaseMapper.selectById(courseId);
         if (courseBase == null) {

@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         //记录异常
         log.error("系统异常{}", e.getMessage(), e);
         //返回异常结果数据
-        return new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
+        return new RestErrorResponse(CommonError.UNKNOW_ERROR.getErrMessage());
     }
     //对校验规则异常类型进行处理
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
