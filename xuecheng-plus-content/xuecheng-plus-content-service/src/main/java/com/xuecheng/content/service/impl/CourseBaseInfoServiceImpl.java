@@ -5,9 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
-import com.xuecheng.content.mapper.CourseBaseMapper;
-import com.xuecheng.content.mapper.CourseCategoryMapper;
-import com.xuecheng.content.mapper.CourseMarketMapper;
+import com.xuecheng.content.mapper.*;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.EditCourseDto;
@@ -24,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: zzy
@@ -43,6 +43,15 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     @Autowired
     private CourseCategoryMapper courseCategoryMapper;
+
+    @Autowired
+    private CourseTeacherMapper courseTeacherMapper;
+
+    @Autowired
+    private TeachplanMapper teachplanMapper;
+
+    @Autowired
+    private TeachplanMediaMapper teachplanMediaMapper;
 
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto) {
@@ -102,6 +111,30 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         //返回课程信息
         CourseBaseInfoDto courseBaseInfo = getCourseBaseInfo(courseId);
         return courseBaseInfo;
+    }
+
+    @Transactional
+    @Override
+    public void deleteCourseBase(Long id) {
+        //判断课程的状态是否为未提交
+        CourseBase courseBase = courseBaseMapper.selectById(id);
+        if(!courseBase.getAuditStatus().equals("202002")){
+            throw new XueChengPlusException("该课程不能删除 ╥﹏╥...");
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("course_id", id.toString());
+        //删除基本信息
+        int row = courseBaseMapper.deleteById(id);
+        if (row == 0) {
+            throw new XueChengPlusException("删除失败 ╥﹏╥...");
+        }
+        //删除营销信息
+        courseMarketMapper.deleteById(id);
+        //删除课程计划
+        teachplanMapper.deleteByMap(map);
+        teachplanMediaMapper.deleteByMap(map);
+        //删除课程教师信息
+        courseTeacherMapper.deleteByMap(map);
     }
 
     @Transactional

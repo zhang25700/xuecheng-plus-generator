@@ -17,5 +17,13 @@
     <sql id="Base_Column_List">
         id, course_id, teacher_name, position, introduction, photograph, create_date
     </sql>
+    <delete id="deleteCourseTeacherInfo">
+        delete from course_teacher where id = #{id} and course_id = #{courseId};
+    </delete>
+    <select id="queryCourseTeacherList" resultMap="BaseResultMap">
+        select id, course_id, teacher_name, position, introduction, photograph, create_date
+        from course_teacher
+        where course_id = #{courseId};
+    </select>
 
 </mapper>

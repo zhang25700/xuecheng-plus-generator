@@ -3,6 +3,7 @@ package com.xuecheng.content.api;
 import com.xuecheng.content.model.dto.CourseCategoryTreeDto;
 import com.xuecheng.content.service.CourseCategoryService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/course-category")
-@Api()
+@Api(value = "课程类别接口",tags = "课程类别接口")
 public class CourseCategoryController {
     @Autowired
     private CourseCategoryService courseCategoryService;
-
+    @ApiOperation("返回课程类别")
     @GetMapping("/tree-nodes")
     public List<CourseCategoryTreeDto> queryTreeNodes(){
         return courseCategoryService.queryTreeNodes("1");

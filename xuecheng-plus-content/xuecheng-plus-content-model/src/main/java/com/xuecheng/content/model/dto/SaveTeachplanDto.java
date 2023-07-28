@@ -2,6 +2,8 @@ package com.xuecheng.content.model.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author: zzy
  * @description: 保存课程计划dto，包括新增、修改
@@ -33,6 +35,16 @@ public class SaveTeachplanDto {
      * 课程类型:1视频、2文档
      */
     private String mediaType;
+
+    /**
+     * 开始直播时间
+     */
+    private LocalDateTime startTime;
+
+    /**
+     * 直播结束时间
+     */
+    private LocalDateTime endTime;
 
 
     /**

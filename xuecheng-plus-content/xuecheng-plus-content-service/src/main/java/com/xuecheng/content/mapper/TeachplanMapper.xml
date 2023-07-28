@@ -96,5 +96,19 @@
                  two.orderby
 
     </select>
+    <select id="findPre" resultMap="BaseResultMap">
+        select *
+        from teachplan t
+        where parentid = #{parentId}
+        and t.orderby &lt; #{orderby}
+        order by t.orderby desc limit 1;
+    </select>
+    <select id="findAfter" resultMap="BaseResultMap">
+        select *
+        from teachplan t
+        where parentid = #{parentId}
+          and t.orderby &gt; #{orderby}
+        order by t.orderby limit 1;
+    </select>
 
 </mapper>
